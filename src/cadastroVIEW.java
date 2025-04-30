@@ -140,16 +140,35 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
-        
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
+        String nome = cadastroNome.getText().trim();
+        String valorStr = cadastroValor.getText().trim();
+
+        if (nome.isEmpty() || valorStr.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            int valor = Integer.parseInt(valorStr);
+
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setNome(nome);
+            produto.setValor(valor);
+            produto.setStatus("A Venda");
+
+            ProdutosDAO produtodao = new ProdutosDAO();
+            produtodao.cadastrarProduto(produto);
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso!");
+
+            cadastroNome.setText("");
+            cadastroValor.setText("");
+
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "O valor deve ser um número inteiro.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao cadastrar: " + ex.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
         
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
