@@ -13,7 +13,7 @@ public class ConectaDAO {
             // Class.forName("com.mysql.cj.jdbc.Driver");
 
             conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost/uc11?useTimezone=true&serverTimezone=UTC",
+                "jdbc:mysql://localhost/uc11?useTimezone=true&serverTimezone=UTC&useSSL=false",
                 "root",
                 "121424@nthonY"
             );
