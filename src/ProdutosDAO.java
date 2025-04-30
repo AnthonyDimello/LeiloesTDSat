@@ -12,25 +12,36 @@ public class ProdutosDAO {
     ResultSet resultset;
 
     public void cadastrarProduto(ProdutosDTO produto) {
-        conn = new ConectaDAO().connectDB();
+    conn = new ConectaDAO().connectDB();
 
-        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
+    String verificarSQL = "SELECT COUNT(*) FROM produtos WHERE nome = ?";
+    String insertSQL = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
 
-        try {
-            prep = conn.prepareStatement(sql);
-            prep.setString(1, produto.getNome());
-            prep.setInt(2, produto.getValor());
-            prep.setString(3, produto.getStatus());
+    try {
+        PreparedStatement verificarPrep = conn.prepareStatement(verificarSQL);
+        verificarPrep.setString(1, produto.getNome());
+        ResultSet rs = verificarPrep.executeQuery();
+        rs.next();
 
-            prep.executeUpdate();
-
-            
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + erro.getMessage());
+        if (rs.getInt(1) > 0) {
+            JOptionPane.showMessageDialog(null, "Produto já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return; // Cancela o cadastro
         }
-    }
 
+        prep = conn.prepareStatement(insertSQL);
+        prep.setString(1, produto.getNome());
+        prep.setInt(2, produto.getValor());
+        prep.setString(3, produto.getStatus());
+
+        prep.executeUpdate();
+
+        // Mensagem de sucesso só aqui
+        JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+
+    } catch (SQLException erro) {
+        JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + erro.getMessage());
+    }
+}
     public ArrayList<ProdutosDTO> listarProdutos() {
         ArrayList<ProdutosDTO> listagem = new ArrayList<>();
         conn = new ConectaDAO().connectDB();
