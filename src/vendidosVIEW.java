@@ -1,3 +1,8 @@
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -27,13 +32,18 @@ public class vendidosVIEW extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaVendas = new javax.swing.JTable();
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaVendas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -41,7 +51,7 @@ public class vendidosVIEW extends javax.swing.JFrame {
                 "ID", "NOME ", "VALOR", "STATUS "
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaVendas);
 
         btnVoltar.setText("Voltar");
 
@@ -90,6 +100,11 @@ public class vendidosVIEW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        listarProdutosVendidos();
+
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -130,6 +145,37 @@ public class vendidosVIEW extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabelaVendas;
     // End of variables declaration//GEN-END:variables
+
+private void listarProdutosVendidos() {
+    try {
+        ProdutosDAO dao = new ProdutosDAO();
+        ArrayList<ProdutosDTO> lista = dao.listarProdutosVendidos();
+
+        DefaultTableModel model = new DefaultTableModel(
+            new String[] { "ID", "Nome", "Valor", "Status" }, 0
+        ) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (ProdutosDTO p : lista) {
+            model.addRow(new Object[] {
+                p.getId(),
+                p.getNome(),
+                p.getValor(),
+                p.getStatus()
+            });
+        }
+
+        tabelaVendas.setModel(model);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao listar produtos vendidos: " + e.getMessage());
+    }
+}
+
+
 }
