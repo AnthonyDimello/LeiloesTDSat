@@ -54,6 +54,11 @@ public class vendidosVIEW extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelaVendas);
 
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Lista de Produtos Vendidos");
@@ -104,6 +109,10 @@ public class vendidosVIEW extends javax.swing.JFrame {
         listarProdutosVendidos();
 
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+    this.dispose(); 
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
     /**
      * @param args the command line arguments
